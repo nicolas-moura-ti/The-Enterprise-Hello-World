@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  message-broker-kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://message-broker-kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  auth-gate-provider:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[AUTH] $$(date) - Validando permissão B2B do usuário... OK\"; sleep 5; done"]
+    ports: ["9001:9001"]
+
+  hello-string-factory:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[JAVA-BOOT] $$(date) - Gerando objeto 'Hello' via AbstractFactoryBeanProxy... success\"; sleep 7; done"]
+
+  world-data-aggregator:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[GO-SERVICE] $$(date) - Agregando dados geográficos para string 'World'...\"; sleep 8; done"]
+
+  punctuation-relational-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: punctuation_db
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password_too_weak_for_enterprise}
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  cache-layer-redis:
+    image: redis:alpine
+    ports: ["6379:6379"]
+
+  soap-legacy-bridge:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[PYTHON-2.7] $$(date) - Convertendo JSON para SOAP 1.2... (Legacy Overhead added)\"; sleep 12; done"]
+
+  logging-sidecar-service:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[LOGGER] $$(date) - CRITICAL: Hello World detected. Proceeding with extreme caution.\"; sleep 1; done"]
+
+  analytics-telemetry:
+    image: prom/prometheus:latest
+    ports: ["9090:9090"]
+
+  quantum-load-balancer:
+    image: nginx:alpine
+    ports: ["80:80"]
+
+  metaverse-compliance-checker:
+    image: alpine:latest
+    command: ["sh", "-c", "while true; do echo \"[NODE-JS] $$(date) - Verificando conformidade no Metaverso... Nível de Sinergia: 98%\"; sleep 15; done"]
+
+networks:
+  default:
+    name: enterprise-synergy-mesh

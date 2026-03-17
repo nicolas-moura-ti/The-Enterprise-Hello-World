@@ -1,0 +1,60 @@
+# 🌐 Global Solutions Enterprise Synergy Inc. - Enterprise Git Ignore
+# "O que não é visto, não pode ser auditado (ou cobrado)"
+
+### OS/IDE Files ###
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+### Java/Maven (hello-string-factory) ###
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mtj.tmp/
+.classpath
+.project
+.settings/
+bin/
+
+### Python (soap-legacy-bridge) ###
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+### Node.js (metaverse-compliance-checker) ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+### Docker/Infrastructure ###
+.env
+*.log
+data/
+db-data/
+kafka-data/
+zookeeper-data/
+enterprise.log
+
+### Enterprise Specific ###
+*.pdf
+*.sig
+DIRECTOR_APPROVAL.pdf
+ceo-approval.sig
+secrets.txt
+not_a_backdoor.sh
+
+### Databases ###
+*.sqlite
+*.db
+init-db/*.log

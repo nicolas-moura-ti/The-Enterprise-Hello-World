@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EnterprisePolicy>
+    <SecurityLevel>MAXIMUM_OVERDRIVE</SecurityLevel>
+    <Compliance>
+        <GDPR>GenteDoidaPassandoRaiva</GDPR>
+        <ISO9001>CertificadoCompradoNoMercadoLivre</ISO9001>
+    </Compliance>
+    <ExecutionRules>
+        <Rule id="1">
+            <Description>Proibir execução em sextas-feiras após as 17h para evitar deploys que estragam o final de semana do estagiário.</Description>
+            <Condition>current_time > 17:00 AND current_day == FRIDAY</Condition>
+            <Action>THROW_CORPORATE_EXCEPTION("Vá para o Happy Hour")</Action>
+        </Rule>
+        <Rule id="2">
+            <Description>Obrigatório ter pelo menos 450 dependências no pom.xml.</Description>
+            <Action>LOG_WARNING("Risco de simplicidade detectado")</Action>
+        </Rule>
+    </ExecutionRules>
+    <CloudStrategy>Cloud-First-Internet-Optional-Never</CloudStrategy>
+</EnterprisePolicy>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.globalsolutions.enterprise</groupId>
+    <artifactId>hello-string-factory</artifactId>
+    <version>1.0.0-RELEASE-CANDIDATE-FINAL-V2</version>
+
+    <!-- Carregando 450+ dependências para garantir conformidade corporativa -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <!-- Biblioteca de manipulação de data de 1998 para legado -->
+        <dependency>
+            <groupId>com.legacy.time</groupId>
+            <artifactId>y2k-fixer</artifactId>
+            <version>0.0.1-BETA</version>
+        </dependency>
+        <!-- Framework CSS para o backend (sim, é necessário para a Sinergia) -->
+        <dependency>
+            <groupId>com.visual.enterprise</groupId>
+            <artifactId>backend-ui-synergy</artifactId>
+            <version>9.9.9</version>
+        </dependency>
+        <!-- 446 outras dependências ocultas por sanidade mental do arquiteto -->
+    </dependencies>
+</project>
