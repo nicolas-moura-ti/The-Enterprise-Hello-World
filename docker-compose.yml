@@ -16,17 +16,22 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   auth-gate-provider:
-    image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[AUTH] $$(date) - Validando permissão B2B do usuário... OK\"; sleep 5; done"]
-    ports: ["9001:9001"]
+    image: python:3.9-slim
+    command: ["python", "-u", "/app/app.py"]
+    volumes:
+      - ./services/auth-gate:/app
 
   hello-string-factory:
-    image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[JAVA-BOOT] $$(date) - Gerando objeto 'Hello' via AbstractFactoryBeanProxy... success\"; sleep 7; done"]
+    image: python:3.9-slim
+    command: ["python", "-u", "/app/app.py"]
+    volumes:
+      - ./services/hello-factory:/app
 
   world-data-aggregator:
-    image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[GO-SERVICE] $$(date) - Agregando dados geográficos para string 'World'...\"; sleep 8; done"]
+    image: python:3.9-slim
+    command: ["python", "-u", "/app/app.py"]
+    volumes:
+      - ./services/world-data-aggregator:/app
 
   punctuation-relational-db:
     image: postgres:15
@@ -37,29 +42,30 @@ services:
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
 
+  orchestrator-brain:
+    image: python:3.9-slim
+    depends_on:
+      - auth-gate-provider
+      - hello-string-factory
+      - world-data-aggregator
+      - punctuation-relational-db
+    environment:
+      - DB_USER=${DB_USER:-admin}
+      - DB_PASSWORD=${DB_PASSWORD:-password_too_weak_for_enterprise}
+    command: ["sh", "-c", "pip install requests psycopg2-binary && python -u /app/app.py"]
+    volumes:
+      - ./services/orchestrator:/app
+
   cache-layer-redis:
     image: redis:alpine
-    ports: ["6379:6379"]
-
-  soap-legacy-bridge:
-    image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[PYTHON-2.7] $$(date) - Convertendo JSON para SOAP 1.2... (Legacy Overhead added)\"; sleep 12; done"]
 
   logging-sidecar-service:
     image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[LOGGER] $$(date) - CRITICAL: Hello World detected. Proceeding with extreme caution.\"; sleep 1; done"]
-
-  analytics-telemetry:
-    image: prom/prometheus:latest
-    ports: ["9090:9090"]
-
-  quantum-load-balancer:
-    image: nginx:alpine
-    ports: ["80:80"]
+    command: ["sh", "-c", "while true; do echo \"[LOGGER] $$(date) - Simulando ingestão de 1GB de telemetria no ElasticSearch...\"; sleep 2; done"]
 
   metaverse-compliance-checker:
     image: alpine:latest
-    command: ["sh", "-c", "while true; do echo \"[NODE-JS] $$(date) - Verificando conformidade no Metaverso... Nível de Sinergia: 98%\"; sleep 15; done"]
+    command: ["sh", "-c", "while true; do echo \"[NODE-JS] $$(date) - Validando conformidade com Avatar 3D... OK\"; sleep 10; done"]
 
 networks:
   default:
